@@ -1,0 +1,138 @@
+*{
+	margin:0px;
+	padding: 0px;
+}
+
+body {
+	background: #111;
+}
+.box {
+	position: relative;
+	width: 600px;
+	height: 600px;
+	margin: 100px auto;
+}
+.box .link{
+	float: left;
+	width: 190px;
+}
+.box .link .button{
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	text-decoration: none;
+	color: #2bcb70;
+	font-family: '微软雅黑',Arial;
+	border:1px solid rgba(255,255,255,0.8);
+	padding-left:30px;
+	background: url('allow.png') no-repeat 130px center;
+	transition: 1s ease;
+	position: relative;
+}
+.link .icon{
+	display: inline-block;
+	width: 100%;
+	height: 170px;
+	margin-bottom: 20px;
+	transition: 0.3s linear;
+}
+.link-miss .icon{
+	background: url("mission.png") no-repeat center;
+}
+.link-play .icon {
+	background: url("play.png") no-repeat center;
+}
+.link-touch .icon {
+	background: url("touch.png") no-repeat center;
+}
+.link .icon:hover{
+	transform: rotate(360deg) scale(1.2);
+}
+.box .link .button:hover{
+	border: 1px solid rgba(255, 255, 255, 1);
+	background-position: 145px center;
+}
+.button .line {
+	position: absolute;
+}
+.button:hover .line{
+	background: #fff;
+	/* animation: ; */
+}
+.button .line-top {
+	left: -190px;
+	top: -1px;
+	height: 2px;
+	width: 0px;
+	transition: 0.3s;
+}
+.button:hover .line-top{
+	width: 100%;
+	left: 1px;
+}
+.button .line-bottom {
+	right: -190px;
+	bottom: -1px;
+	height: 2px;
+	width: 0px;
+	transition: 0.3s;
+}
+.button:hover .line-bottom{
+	width: 100%;
+	right: -1px;
+}
+.button .line-right {
+	right: -1px;
+	top: -100px;
+	height: 0px;
+	width: 2px;
+	transition: 0.3s;
+}
+.button:hover .line-right{
+	height: 100%;
+	top: -1px;
+}
+.button .line-left {
+	left: -1px;
+	bottom: -100px;
+	height: 0px;
+	width: 2px;
+	transition: 0.3s;
+}
+.button:hover .line-left{
+	height: 100%;
+	bottom: -1px;
+}
+.tip {
+	position: absolute;
+	display: none;
+	width: 184px;
+	height: 40px;
+	line-height: 40px;
+	background: green;
+	color: #fff;
+	text-align: center;
+	left: 3px;
+	top: 110px;
+	border-radius: 5px;
+	opacity: 0;
+}
+.tip:after{
+	content: '';
+	position:  absolute;
+	/* width: 0px;
+	height: 0px; */
+	border-top: 10px green solid;
+	border-left:10px transparent solid;
+	border-right: 10px transparent solid;
+	bottom: -9px;
+	right: 30%;
+}
+
+/* .clearfloat:after{
+	content: "",
+	display: table;
+	clear: both;
+} */

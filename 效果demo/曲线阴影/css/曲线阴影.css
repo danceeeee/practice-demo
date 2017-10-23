@@ -1,0 +1,102 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	font-family: arial;
+	font-size: 20px;
+}
+ul {
+	list-style: none;
+}
+.wrap {
+	width: 70%;
+	height: 200px;
+	margin: 50px auto;
+	background: #fff;
+	
+}
+.wrap h1 {
+	font-size: 20px;
+	text-align: center;
+	line-height: 50px;
+}
+
+.effect {
+	position: relative;
+	box-shadow:0px 2px 4px rgba(0,0,0,0.5),0px 0px 40px rgba(0,0,0,0.11) inset;
+	-webkit-box-shadow: ;
+	/*-moz-box-shadow:;*/
+}  /*正阴影部分 ,
+x轴偏移量，y轴偏移量，模糊半径，颜色，内阴影
+内阴影的  模糊度设置高一点
+	然后通过：after 和：before  实现曲线阴影   重叠效果需要定位
+	通过设置四个方向的距离  来设置 宽度和高度
+* 
+* 设置：before和after 两个元素重叠  可以加强阴影的效果
+* 设置 不同的 宽度和高度 视觉效果不同
+* border-radius的值，分数x/y，分别表示水平方向上的半径和垂直方向上的半径
+* */
+
+.effect:after,.effect:before {
+	content:"";
+	background: #000;
+	position: absolute;
+	z-index: -1;
+	top: 50%;	 
+	bottom: 0px;
+	left: 20px;
+	right: 20px;
+	box-shadow: 0 0 20px rgba(0,0,0,0.8);
+	border-radius: 100px/10px;
+}
+
+.box {
+	width: 500px;
+	clear: both;
+	overflow: hidden;
+	margin: 50px auto;
+}
+.box li {
+	float: left;
+	width: 200px;
+	height: 200px;
+	position:relative;
+	border: 10px solid #fff;
+	background: #fff;
+	margin:10px ;
+	box-shadow: 0px 2px 10px rgba(0,0,0,0.3);
+	
+}
+.box li img {
+	display: block;
+	height: 200px;
+	width: 200px;
+}  /* 图片格式不相同时，可以手动设置图片块元素并定义高度和宽度*/
+
+.box li:before {
+	content: "";
+	position:absolute;
+	z-index:-1 ;
+	width: 90%;
+	height: 89%;
+	left: 22px;
+	bottom: 5px;
+	background:transparent;
+	box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+	-webkit-transform: skew(-15deg);
+	-webkit-transform: rotate(6deg);
+}
+.box li:after {
+	content: "";
+	position:absolute;
+	z-index:-1 ;
+	width: 90%;
+	height: 89%;
+	right: 20px;
+	bottom: 5px;
+	background:transparent;
+	box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+	-webkit-transform: skew(15deg);
+	-webkit-transform: rotate(-6deg);
+}

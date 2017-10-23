@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="css/reset.css">
+		<style type="text/css">
+		/* 基础样式，文字顺序left，控制宽度100% */
+			html{
+				width: 100%;
+				height: 100%;
+				overflow-x: hidden;
+			}
+			body{
+				text-align: left;
+				width: 100%;
+				overflow: hidden;/* 此处为了防止文字溢出，也导致文本不能上下滑动，在htnl上设置 */
+				
+			}
+			#root {
+				background: #e9dfc7;
+			}
+			/* 阅读器内容   字体和行高设置,
+			根据设计图 */
+			.m-read-content{
+				font-size: 14px;
+				color: #555;
+				line-height: 31px;
+				padding: 15px;
+			}
+			.m-read-content h4 {
+				font-size: 20px;
+				color: #736357;
+				border-bottom: solid 1px #736357;
+				letter-spacing: 2px;
+				margin:0 0 1em 0;
+			}
+			.m-read-content p{
+				text-indent: 2em;
+				margin: 0.5em 0;
+				line-height: 24px;
+			}
+			.m-button-bar{
+				width: 70%;
+				max-width: 800px;
+				margin: 10px auto;
+			}
+			.u-tab {
+				height: 34px;
+				line-height: 34px;/* 和高度相同，实现内容的垂直居中 */
+				border-radius: 8px;
+				border: 1px solid #858382;
+				font-size: 12px;
+				background: #000;
+				opacity: 0.9;
+				box-sizing:border-box;
+			}
+			.u-tab li {
+				display: inline-block; /*实现纵向排列 */
+				width:49%; 
+				text-align: center;
+				color: #fff;
+			}
+			.u-tab li+li{
+				border-left: 1px solid #fff;
+			}
+			.top-nav {
+				position: fixed;
+				top: 0px;
+				height: 50px;
+				width: 100%;
+				z-index: 999;
+				background: #000;
+			}
+			.top-nav .icon-back{
+				position: absolute;
+				top: 14px;
+				left: 10px;/*此处的定位都是更具设计图得出 */
+				width: 23px;
+				height: 23px;
+				background: #fff;
+				background-size: contain;
+			}
+			.top-nav .nav-title{
+				position: absolute;
+				top: 16px;
+				left: 42px;
+				color: #d5d5d6;
+			}
+			#bottom_nav{
+				position: fixed;
+				bottom: 0px;
+				left: 0px;
+				width: 100%;
+				height: 70px;
+				background: #000;
+				color: #fff;
+			}
+			#bottom_nav li{
+				display: inline-block;
+				position: relative;
+				width: 32%;
+				height: 100%;
+				font-size: 10px;
+				margin: 5px 0px;
+			}
+			
+			#bottom_nav .content-text {
+				position: absolute;
+				width: 100%;
+				text-align: center;
+				top: 35px;
+			}
+			#bottom_nav .icon-list{
+				position: absolute;
+				width: 23px;
+				height: 23px;
+				background: #fff;
+				top: 10px;
+				left: calc(50% - 11px);
+				background-size: contain;
+			}
+			#bottom_nav .icon-font{
+				position: absolute;
+				width: 23px;
+				height: 23px;
+				background: #fff;
+				top: 10px;
+				left: calc(50% - 11px);
+				background-size: contain;
+			}
+			#bottom_nav .icon-bg{
+				position: absolute;
+				width: 23px;
+				height: 23px;
+				background: #fff;
+				top: 10px;
+				left: calc(50% - 11px);
+				background-size: contain;
+			}
+			/* 背景色透明 */
+			.nav-pannel-bg{
+				position: fixed;
+				bottom: 70px;
+				height: 150px;
+				width: 100%;
+				background: #000;
+				opacity: 0.9;
+				z-index: 2;
+				/* 背景色的z-index要小于内容*/
+				}
+			#font_operate{
+				position: fixed;
+				bottom: 70px;
+				width: 100%;
+				height: 150px;
+				color: #fff;
+				font-size: 16px;
+				border-bottom: 1px solid #666666;
+				z-index: 1001;
+			}
+			#font_operate .font-child{
+				height: 40px;
+				padding:5px 15px;
+				margin: 15px 5px;
+			}
+			#font_operate .font-child span {
+				padding: 5px 10px;
+				line-height: 30px;
+			}
+			#font_operate .font-child .font-size-button{
+				width: 70px;
+				background: #000;
+				color: #fff;
+				border: 1px #8c8c8c solid;
+				border-radius:15px;
+				padding: 4px 10px; 
+				margin-left:20px;
+			}
+			#font_operate .bg-color .bg-options{
+				position: relative;
+				display: inline-block;
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				vertical-align: -10px;
+				margin-left: 10px;
+			}
+			#font_operate .bg-color .bg-options .bg-current{
+				position: absolute;
+				top: -2.5px;
+				left: -2.5px;
+				width: 33px;
+				height: 33px;
+				border: 1px solid #ff7800;
+				border-radius: 50%;
+				display: inline-block;
+			}
+			
+			.acticle-action-middle {
+				position: fixed;
+				z-index: 1001;
+				width: 100%;
+				height: 40%;
+				top: 30%;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 包裹容器 -->
+		<div id="root" class="container">
+			<!-- 设计稿中  点击屏幕中央会显示顶部和底部导航栏。设置一个层来实现 -->
+			
+			<div class="acticle-action-middle" id="action-middle"></div>
+			
+			<!-- 顶部导航栏 -->
+			<div id="top_nav" class="top-nav" style="display:none">
+				<div class="icon-back"></div>
+				<div class="nav-title">返回</div>
+			</div>
+			<div id="fition_chapter_title"></div>
+			<!-- 主体内容 -->
+			<div id="fiction_container" class="m-read-content">
+			</div>
+			<!-- 翻页按钮 -->
+			<div class="m-button-bar">  
+				<ul class="u-tab">
+					<li id="prev_button">上一章</li>
+					<li id="next_button">下一章</li>
+				</ul>
+			</div>
+			<!-- 底部导航栏 -->
+			<ul id="bottom_nav" style="display:none">
+				<li class="bottom_list">
+					<div class="icon-list"></div>
+					<div class="content-text">目录</div>
+				</li>
+				<li class="bottom-font">
+					<div class="icon-font"></div>
+					<div class="content-text">字体</div>
+				</li>
+				<li class="bottom-bg">
+					<div class="icon-bg"></div>
+					<div class="content-text">白天</div>
+				</li>
+			</ul>
+			
+			<!--底部字体操作栏  -->
+			<div id="font_operate" style="display:none">
+				<div class="font-size font-child">
+					<span>字号</span>
+					<button id="large-font" class="font-size-button">大</button>
+					<button id="small-font" class="font-size-button">小</button>
+				</div>
+				<div class="bg-color font-child">
+					<span>背景</span>
+					<div class="bg-options" style="background-color:#f7eee5">
+						<div class="bg-current"></div>
+					</div>
+					<div class="bg-options" style="background-color:#e9dfc7">
+						<div></div>
+					</div>
+					<div class="bg-options" style="background-color:#a4a4a4">
+						<div></div>
+					</div>
+					<div class="bg-options" style="background-color:#cdefce">
+						<div></div>
+					</div>
+					<div class="bg-options" style="background-color:#283548">
+						<div></div>
+					</div>
+				</div>
+			</div>
+			<!-- 透明背景色需要单独一个层实现 -->
+			<div class="nav-pannel-bg" style="display:none"></div>
+		</div>
+		<script src="lib/zepto.min.js"></script>
+		<script>
+			window.jQuery = $;
+		</script>
+		<script src="js/jquery.base64.js"></script>
+		<script src="js/jquery.jsonp.js"></script>
+		<script>
+			(function(){
+
+				// 实现html5的本地储存接口
+				var Util = (function(){
+					var prefix = 'html_reader_';//添加前缀，防止和其他存储文件混淆
+					var StorageGetter = function(key){
+						return localStorage.getItem(prefix+key);
+					}
+					var StorageSetter = function(key,value){
+						return localStorage.setItem(prefix+key,value);
+					}
+					//封装jsonp操作
+					var getJsonp = function(url,callback){
+						return $.jsonp({
+							url:url,
+							cache:true,
+							callback:'duokan_fiction_chapter',
+							success:function(result){
+								//获得的数据结构是base64，需要进行解码
+								var data = $.base64.decode(result);
+								var json = decodeURIComponent(escape(data));
+								callback(json);
+							},
+
+						})
+					}
+					return {
+						getJsonp:getJsonp,
+						StorageSetter:StorageSetter,
+						StorageGetter:StorageGetter,
+					}	
+				})();
+				// 初始化需要用到的常量(在结构中可以对js，css使用的累名进行不同的命名标识 )
+				var Dom = {
+					top_nav:$('#top_nav'),
+					bottom_nav:$('#bottom_nav'),
+					bottom_bg:$('#bottom_nav .bottom-bg'),
+					font_operate:$('#font_operate'),
+					bottom_pannel:$('.nav-pannel-bg'),
+					bg_options:$('.bg-options'),
+					root:$('#root'),
+					fiction_container:$('#fiction_container'),
+					text:$('#bottom_nav .bottom-bg').find('.content-text')[0],
+				};
+
+				
+				var Win = $(window);
+				var Doc = $(document);
+				//将需要重复调用的方法提升成全局变量。
+				var readerModel;
+				var readerUI;
+				//字体数据
+				var init_font_size = (Util.StorageGetter('font_size')?Util.StorageGetter('font_size'):14);
+				init_font_size = parseInt(init_font_size,10);
+				//取出本地存储数据之后立即渲染
+				Dom.fiction_container.css('font-size',init_font_size);
+				//背景数据
+				var bg_color = (Util.StorageGetter('bg_color')?Util.StorageGetter('bg_color'):'#e9dfc7');
+				Dom.root.css('background-color',bg_color);
+				var current_index = (Util.StorageGetter('current_index')?Util.StorageGetter('current_index'):0);
+				console.log(Util.StorageGetter('current_index'));
+				console.log(Dom.bg_options[current_index])
+				$(Dom.bg_options[current_index]).children().addClass('bg-current').parent().siblings('div').empty();
+				var text = (Util.StorageGetter('bottom_text')?Util.StorageGetter('bottom_text'):"白天");
+				Dom.text.innerText = text;
+				//当前章节页数数据
+				var Chapter_id;
+				
+				
+				//入口函数
+				function main(){
+					readerModel = ReaderModel();
+					readerUI = ReaderBaseFrame(Dom.fiction_container);
+					readerModel.init(function(data){
+						readerUI(data);
+					});
+					Hanlder();
+
+				}				
+				//实现和服务器端的数据交互方法
+				function ReaderModel(){
+					//获取本地数据，实际中是从服务器端获取数据
+					var ChapterTotal;
+					
+					//初始化方法
+					var init = function(UIcallback){
+						getFictionInfoPromise().then(function(d){
+							return getCurChapterContentPromise();
+						}).then(function(data){
+							UIcallback(data);
+						})
+					};
+						//取得小说信息
+					// 	getFictionInfo(function(){
+					// 		//取得每一个章节信息
+					// 		getCurChapterContent(Chapter_id,function(data){
+					// 			//xuanran 
+					// 			UIcallback && UIcallback(data);
+					// 		});
+					// 	});
+					// };	
+					// var getFictionInfo = function(callback){
+					// 	// $.get 相当于AJAX的get请求的
+					// 	$.get('data/chapter.json',function(data){
+					// 		Chapter_id = Util.StorageGetter('chapterId');
+					// 		if(Chapter_id == null){
+					// 		 Chapter_id = data.chapters[1].chapter_id;
+					// 		}
+					// 		ChapterTotal = data.chapters.length;
+					// 		callback && callback(data)
+					// 	},'json'); 
+					// };
+					//promise异步  避免回掉函数的多层嵌套
+					var getFictionInfoPromise = function(){ 
+						//这里创建一个函数来返回Promise对象，实现在调用时 才 生成promise  ，而不是一开始就生成
+						return new Promise(function(resolve,reject){
+						$.get('data/chapter.json',function(data){
+							if(data.result == 0){
+							Chapter_id = Util.StorageGetter('chapterId');
+							if(Chapter_id == null){
+							 Chapter_id = data.chapters[1].chapter_id;
+							}
+							ChapterTotal = data.chapters.length;
+							resolve();
+							}else{
+								reject();
+							}
+						},'json'); 
+					})
+					};
+					// var getCurChapterContent = function(chapter_id,callback){
+					// 	 $.get('data/data'+(chapter_id)+'.json',function(data){
+					// 	 	//判断条件都是提前约定好的
+					// 	 	if(data.result == 0){
+					// 	 		var url = data.jsonp;
+					// 	 		Util.getJsonp(url,function(data){
+
+					// 	 			callback && callback(data)
+					// 	 		})
+					// 	 	}
+					// 	 })
+					// };
+					var getCurChapterContentPromise =function(){
+						return new Promise(function(resolve,reject){
+						 $.get('data/data'+(Chapter_id)+'.json',function(data){
+						 	//判断条件都是提前约定好的
+						 	if(data.result == 0){
+						 		var url = data.jsonp;
+						 		Util.getJsonp(url,function(data){
+						 		resolve(data);
+						 		})
+						 	}else{
+						 		reject();
+						 	}
+						 })
+					})
+					}
+					var prevChapter=function(UIcallback){
+						Chapter_id=parseInt(Chapter_id,10);
+						//console.log(Chapter_id);
+						if(Chapter_id == 1){
+							return;
+						}
+						Chapter_id -= 1;
+						Util.StorageSetter('chapterId',Chapter_id);
+						getCurChapterContentPromise().then(function(data){
+							UIcallback(data);
+						})
+					}
+
+					var nextChapter=function(UIcallback){
+						Chapter_id =parseInt(Chapter_id,10);
+						if(Chapter_id == ChapterTotal){
+							return;
+						}
+						Chapter_id += 1;
+						Util.StorageSetter('chapterId',Chapter_id);
+						getCurChapterContentPromise().then(function(data){
+							UIcallback(data);
+						});
+					}
+					// 将接口暴露出来
+					return {
+						init:init,
+						prevChapter:prevChapter,
+						nextChapter:nextChapter,
+					}
+				}
+
+				//实现部分结构的初始化
+				//首先了解获得的数据结构，据此来渲染页面
+				function ReaderBaseFrame(container){
+					function parseChapterData(jsonData){
+						var jsonObj = JSON.parse(jsonData);
+						var html = '';
+						html += '<h4>'+jsonObj.t +'</h4>';
+						for(var i = 0;i<jsonObj.p.length;i++){
+							html += '<p>' +jsonObj.p[i] + '</p>';
+						}
+						return html;
+					}
+					return function(data){
+						container.html(parseChapterData(data));
+					}
+				}
+
+				//交互操作
+				function Hanlder(){
+					//点击唤醒导航栏
+					$('#action-middle').click(function(){
+						if(Dom.top_nav.css('display')==='none'){
+							
+							Dom.top_nav.show();
+							Dom.bottom_nav.show();
+						}else{
+							Dom.top_nav.hide();
+							Dom.bottom_nav.hide();
+							Dom.font_operate.hide();
+							Dom.bottom_pannel.hide();
+						}
+					});
+					//唤起字体选项
+					$('.bottom-font').click(function(){
+						if(Dom.font_operate.css('display')==='none'){
+							Dom.font_operate.show();
+							Dom.bottom_pannel.show();
+						}else{
+							Dom.font_operate.hide();
+							Dom.bottom_pannel.hide();
+						}
+					});
+					// 字体大小变换
+					$('#large-font').click(function(){
+						if(init_font_size < 25){
+							init_font_size += 3;
+						Dom.fiction_container.css('font-size',init_font_size+'px');
+						//存储用用户修改的设置
+						Util.StorageSetter('font_size',init_font_size);
+						};
+
+					})
+					$('#small-font').click(function(){
+						if(init_font_size > 10){
+							init_font_size -= 3;
+						Dom.fiction_container.css('font-size',init_font_size+'px');
+						Util.StorageSetter('font_size',init_font_size);
+						};
+
+					})
+					//背景色变换
+					Dom.bg_options.click(function(){
+						var $this = $(this);
+						var index = Dom.bg_options.index(this);
+						//console.log(index);
+						bg_color = $this.css('background-color');
+						Dom.root.css('background-color',bg_color) ;
+						Util.StorageSetter('current_index',index);
+						Util.StorageSetter('bg_color',bg_color);
+						$this.append($('<div class="bg-current"></div>')).siblings('div').empty();
+					})
+					
+					//白天黑夜切换
+					Dom.bottom_bg.click(function(){
+						//console.log(text.innerText)
+						if(Dom.text.innerText == '白天'){
+							Dom.bg_options.last().trigger('click');
+							Dom.text.innerText ='黑夜';
+						}else{
+							Dom.bg_options.first().trigger('click');
+							Dom.text.innerText ='白天';
+						}
+						Util.StorageSetter('bottom_text',Dom.text.innerText)
+					});
+					//滚动屏幕时也要自动隐藏上下导航
+					Win.scroll(function(){
+						Dom.top_nav.hide();
+						Dom.bottom_nav.hide(); 
+						Dom.font_operate.hide();
+						Dom.bottom_pannel.hide();
+					});
+					//翻页事件
+					$('#prev_button').on('click',function(){
+						readerModel.prevChapter(function(data){
+							readerUI(data);
+						})
+					});
+					$('#next_button').on('click',function(){
+						readerModel.nextChapter(function(data){
+							readerUI(data);
+						})
+					});
+				}
+
+			main();	
+			})();
+		</script>
+	</body>
+</html>
