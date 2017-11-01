@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title>鼠标悬浮模糊</title>
+	<style>
+	@keyframes masked-animation {
+    0%  { background-position: 0 0;}
+    100% { background-position: -100% 0;}
+	}
+		.task{
+			background: #000;
+			height: 500px;
+			padding-top: 50px;
+		}
+		.task .box{
+			position: relative;
+			box-sizing: border-box;
+			width: 560px;
+			height: 360px;
+			padding: 30px;
+			background: #fff;
+			margin: 10px auto;
+		}
+		.task .box .image{
+			width: 500px;
+			height: 300px;
+			background:url('images/悬浮.jpg') no-repeat #fff;
+		}
+		.task .box:hover .image{
+			filter: blur(4px);
+			transition: 0.5s ease;
+		}
+		.task .box .content {
+			position: absolute;
+			opacity: 0;
+			left: 50%;
+			margin-left: -150px;
+			top: 60%;
+			margin-top:-70px; 
+			width: 300px;
+			height: 140px;
+			z-index: 10;
+			transition: all 0.7s ease;
+		}
+		.task .box:hover .content{
+			display: block;
+			top:50%;
+			opacity: 1;
+		}
+		.task .box .content div{
+			font-size: 2em;
+			font-weight: bolder;
+			margin-top: 20px;
+			display: block;
+			text-align: center;
+		}
+		.task .box .content .title{
+			background-image: -webkit-linear-gradient(left, #147B96, #E6D205, #147B96, #E6D205, #147B96);
+	        -webkit-text-fill-color: transparent;
+	        -webkit-background-clip: text;
+	        -webkit-background-size: 200% 100%;
+	        -webkit-animation: masked-animation 7s infinite;
+	        /* 背景扩大一倍，背景才有移动的空间 */
+		}
+		.task .box .content .link{
+			background-image: -webkit-linear-gradient(left,#457, #E6D205, #147B96);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-size: 200% 100%;
+			-webkit-animation: masked-animation 5s infinite;
+		}
+		.task .box .content .link:hover{
+			animation-play-state: paused;
+			/* 暂停动画 */
+		}
+		.task .box .content .line{
+			position: absolute;
+			transition: all 1.2s ease;
+		}
+		.task .box .content .line{
+      		background: #fff;
+      		
+		}
+		.task .box .content .line-top{
+			top: 0px;
+			left: 50%;
+			width: 0px;
+			height: 2px;
+		}
+		.task .box:hover .content .line-top{
+			width: 100%;
+			left: 0px;
+		}
+		.task .box .line-bottom{
+			bottom: 0px;
+			left: 50%;
+			width: 0px;
+			height: 2px;
+		}
+		.task .box:hover .line-bottom{
+			width: 100%;
+			left: 0px;
+		}
+		.task .box .line-left{
+			left: 0px;
+			top: 50%;
+			left: 0px;
+			width: 1px;
+			height: 0px;
+		}
+		.task .box:hover .line-left{
+			top: 0px;
+			height: 100%;
+		}
+		.task .box .line-right{
+			right: 0px;
+			top: 50%;
+			right: 0px;
+			width: 1px;
+			height: 0px;
+		}
+		.task .box:hover .line-right{
+			top: 0px;
+			height: 100%;
+		}
+		.task .box a {
+			text-decoration: none;
+			font-size: 0.6em;
+			color: #fff;
+		}
+
+	</style>
+</head>
+<body>
+	<section>
+	<h2><a href="http://ife.baidu.com/course/detail/id/14">有趣的鼠标悬浮模糊效果</a></h1>
+		<h3 id="aa">任务描述</h3>
+		<ul>
+		<li>实现图示效果（<a href="https://ww3.sinaimg.cn/large/006tNbRwly1fcr5jmrmujg30cj06xqv5.gif">点击查看</a>）</li>
+		<li>实现文字的流光渐变动画</li>
+		<li>背景图需要进行模糊处理</li>
+		<li>实现按钮边框的从中间到两边扩展开</li>
+		</ul>
+		
+	</section>
+	<section class="task">
+		<div class="box">
+			<div class="image"></div>
+			<div class="content">
+				<span class="line line-top"></span>
+				<span class="line line-bottom"></span>
+				<span class="line line-left"></span>
+				<span class="line line-right"></span>
+				<div class="title">草帽海贼团编年史</div>
+				<div class="link"><a href="#">点击了解</a></div>
+			</div>
+		</div>
+	</section>
+
+	<h3 id="-">在线学习参考资料</h3>
+	<ul>
+		<li><a href="http://www.w3cplus.com/content/css3-gradient">linear-gradient颜色渐变</a></li>
+		<li><a href="http://www.zhangxinxu.com/wordpress/2014/02/css3%E4%B8%8E%E6%96%87%E5%AD%97%E6%B8%90%E5%8F%98%E6%B0%B4%E7%BA%B9%E6%B3%A2%E5%8A%A8%E6%95%88%E6%9E%9C/">文字渐变</a></li>
+		<li><a href="http://web.jobbole.com/91212/"> background-clip: text</a></li>
+	</ul>
+</body>
+</html>
