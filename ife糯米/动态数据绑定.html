@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h3>发布订阅模式</h3>
+	<p>各个模块之间的关联性可以使用观察者模式来设计</p>
+	<p>观察者模式又叫做发布订阅模式，它定义了一种一对多的关系，让多个观察者对象同时监听某一个主题对象，这个主题对象的状态发生改变时就会通知所有观察着对象。它是由两类对象组成，主题和观察者，主题负责发布事件，同时观察者通过订阅这些事件来观察该主体，发布者和订阅者是完全解耦的，彼此不知道对方的存在，两者仅仅共享一个自定义事件的名称。</p>
+	<p>实现方式，首先定义一个存放事件容器，存放各种主题定义的事件。每当一个主题发布一个事件之后，就将该事件存入容器该主题的事件列表。每当订阅者监听到主题对象变化时，就会执行该主题的事件列表</p>
+	<script>
+		//类没有变量声明提升，必须在调用之前声明
+		class createEvent{
+			constructor() {
+				this.handlers = {}
+			}
+			on(key,eventHandler) {
+				if(!(key in this.handlers)) {
+					this.handlers[key] = [];
+				}
+				this.handlers[key].push(eventHandler);
+			}
+
+			off(key,eventHandler) {
+				if(this.handlers[key]){
+					this.handlers[key].forEach((val,ind) => {//forEach的函数自动传入 值，索引
+						if(val === eventHandler) {
+							this.handlers[key].splice(ind,1)
+						}
+					})
+				}
+			}
+			emit(key,...argus) {//...argus，reset参数，将多个参数放入argus数组中
+				// ...扩展运算符，将一个数组转换为逗号分隔的参数序列，相当于reset的逆运算
+				if(this.handlers[key]){
+					for(let i of this.handlers[key]){
+						console.log(argus);
+						i(...argus);
+					}
+				}else{
+					console.log(`event of '${key}' is not exist `)
+				}
+			}
+		}
+		//该方法监听的 对象 必须是 在创建类的时候，首次添加的data，后面直接通过obj.data = data形式添加的不能动态响应
+		class Observer{
+			constructor(obj) {
+				this.eventCreater = new createEvent();	
+				this.obj = obj;
+				this.walk(obj);	
+			}
+			walk(obj) { //遍历对象，对深层嵌套(属性值也是对象)的对象绑定
+				let val;
+				for (let key of Object.keys(obj)){
+					val = obj[key];
+					if(typeof val === 'object' && val !== null) {
+						new Observer(val);
+					}
+
+					this.convert(key,val)
+				}
+			}
+			convert(key,val) {
+				// console.log(key)
+				var that = this;
+				Object.defineProperty(this.obj,key,{
+					enumerable:true,
+					configurable:true,
+					get:function() {
+						console.log(`你访问了${key}`);
+						return val
+					},
+					set:function(new_val) {
+						// console.log(this);
+					//这里不能用this，因为defineProperty定义的时候绑定的是this.obj  不是 实例，所以不存在$watch方法
+						console.log(`你设置了新的值${key},值为${new_val}`)
+			// that.obj[key]=val 这里不能这样设置，这样会导致循环引用，这里设置this.obj的属性，会调用set函数，然后循环调用，死循环
+						if (val === new_val) return;
+						that.eventCreater.emit(key,val,new_val)
+						val = new_val;
+						//这里应该设置val = new_balue，应为传入的val是obj[key]，是一个对象的属性，属于引用对象。传入的是这个对象的地址，所以这里赋值的时候会改变原来对象中的属性。
+					}
+				})
+				
+			}
+			$watch(key,handler) {
+ 				this.eventCreater.on(key,handler);
+ 				return this;
+			}
+			$emit(key) {
+				var self = this;
+				var argus = Array.prototype.slice.call(arguments,1);
+				this.eventCreater.emit(key,...argus);
+				return self;
+			}
+		}
+
+		var obe = new Observer({name:{fname:'ty',lname:'js'},age:10});
+
+	</script>
+</body>
+</html>

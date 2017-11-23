@@ -1,0 +1,39 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	font-family: "arial, helvetica, sans-serif";
+	font-size: 16px;
+}
+
+ol,ul,li {
+	list-style: none;
+}
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+img {
+	display: block;
+	border: none;
+}
+.clear {
+	zoom: 1;
+}
+
+.claerfloat:after {
+	content: ""; 
+	display: block;
+	visibility: hidden;
+	clear: both;
+	height: 0;   无法正常清除浮动？
+}
+.clearfloat {
+	zoom: 1;  
+}
+
+.clearfloat1:after {
+	content: "";
+	display: table;
+	clear: both;
+}
